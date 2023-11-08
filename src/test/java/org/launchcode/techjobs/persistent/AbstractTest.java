@@ -8,6 +8,7 @@ import java.nio.file.Path;
 /**
  * Created by Chris Bay
  */
+
 public class AbstractTest {
 
     protected static String getFileContents(String fileName) throws IOException {
