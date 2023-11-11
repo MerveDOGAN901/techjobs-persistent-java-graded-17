@@ -2,19 +2,19 @@ package org.launchcode.techjobs.persistent.models;
 
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Job extends AbstractEntity{
 
     @ManyToOne
     private Employer employer;
+
     @ManyToMany
-    private List<Skill> skills;
+    private List<Skill> skills =new ArrayList<Skill>();
 
     public Job() {
     }
@@ -28,6 +28,7 @@ public class Job extends AbstractEntity{
     // Getters and setters.
 
     public Employer getEmployer() {
+
         return employer;
     }
 

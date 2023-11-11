@@ -14,14 +14,16 @@ package org.launchcode.techjobs.persistent.controllers;
 @Controller
 @RequestMapping("skills")
 public class SkillController {
+
     @Autowired
     private SkillRepository skillRepository;
 
     @RequestMapping("")
     public String index(Model model) {
-        model.addAttribute("skills", skillRepository.findAll());
-        return "skills/index";
+
+        return "skills";
     }
+
 
     @GetMapping("add")
     public String displayAddSkillForm(Model model) {
@@ -36,18 +38,19 @@ public class SkillController {
         if (errors.hasErrors()) {
             return "skills/add";
         }
+
         skillRepository.save(newSkill);
-        return "redirect:";
+
+        return "redirect:../add";
     }
 
-
     @GetMapping("view/{skillId}")
-    public String displayViewSkill(Model model, @PathVariable int skillId) {
+    public String displayViewEmployer(Model model, @PathVariable int skillId) {
 
         Optional optSkill = skillRepository.findById(skillId);
         if (optSkill.isPresent()) {
             Skill skill = (Skill) optSkill.get();
-            model.addAttribute("skill", skill);
+            model.addAttribute("skills", skill);
             return "skills/view";
         } else {
             return "redirect:../";
