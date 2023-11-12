@@ -33,10 +33,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestTaskFour extends AbstractTest {
 
     /*
-    * Verifies that Skill.jobs exists
-    * */
+     * Verifies that Skill.jobs exists
+     * */
     @Test
-    public void testSkillClassHasJobsField () throws ClassNotFoundException {
+    public void testSkillClassHasJobsField() throws ClassNotFoundException {
         Class skillClass = getClassByName("models.Skill");
         Field jobsField = null;
 
@@ -48,10 +48,10 @@ public class TestTaskFour extends AbstractTest {
     }
 
     /*
-    * Verifies that Skill.jobs is of type List (or a subclass of List)
-    * */
+     * Verifies that Skill.jobs is of type List (or a subclass of List)
+     * */
     @Test
-    public void testSkillJobsFieldHasCorrectType () throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void testSkillJobsFieldHasCorrectType() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class skillClass = getClassByName("models.Skill");
         Method getJobsMethod = skillClass.getMethod("getJobs");
         Skill skill = new Skill();
@@ -60,10 +60,10 @@ public class TestTaskFour extends AbstractTest {
     }
 
     /*
-    * Verifies that Skill.jobs has @ManyToMany with correct mappedBy value
-    * */
+     * Verifies that Skill.jobs has @ManyToMany with correct mappedBy value
+     * */
     @Test
-    public void testSkillJobsFieldHasCorrectAnnotation () throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void testSkillJobsFieldHasCorrectAnnotation() throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class skillClass = getClassByName("models.Skill");
         Field jobsField = skillClass.getDeclaredField("jobs");
         Annotation annotation = jobsField.getDeclaredAnnotation(ManyToMany.class);
@@ -73,10 +73,10 @@ public class TestTaskFour extends AbstractTest {
     }
 
     /*
-    * Verifies that Job.skills has been refactored to be of the correct type, with mapping annotation
-    * */
+     * Verifies that Job.skills has been refactored to be of the correct type, with mapping annotation
+     * */
     @Test
-    public void testJobSkillsHasCorrectTypeAndAnnotation () throws ClassNotFoundException, NoSuchFieldException {
+    public void testJobSkillsHasCorrectTypeAndAnnotation() throws ClassNotFoundException, NoSuchFieldException {
         Class jobClass = getClassByName("models.Job");
         Field skillsField = jobClass.getDeclaredField("skills");
         Type skillsFieldType = skillsField.getType();
@@ -85,11 +85,11 @@ public class TestTaskFour extends AbstractTest {
     }
 
     /*
-    * Verifies that after refactoring Job.skills, the non-default constructor
-    * and accessors have been updated
-    * */
+     * Verifies that after refactoring Job.skills, the non-default constructor
+     * and accessors have been updated
+     * */
     @Test
-    public void testJobSkillsRefactoring () throws ClassNotFoundException, NoSuchMethodException {
+    public void testJobSkillsRefactoring() throws ClassNotFoundException, NoSuchMethodException {
         Class jobClass = getClassByName("models.Job");
         try {
             Constructor nonDefaultConstructor = jobClass.getConstructor(Employer.class, List.class);
@@ -108,24 +108,28 @@ public class TestTaskFour extends AbstractTest {
     }
 
     /*
-    * Verifies that HomeController has an @Autowired skillRepository field
-    * */
-   @Test
-   public void testHomeControllerHasSkillRepository () throws ClassNotFoundException {Class homeControllerClass = getClassByName("controllers.HomeController");        Field skillRepositoryField = null;try {        skillRepositoryField = homeControllerClass.getDeclaredField("skillRepository");
-      } catch (NoSuchFieldException e) {
-       fail("HomeController should have a skillRepository field");
+     * Verifies that HomeController has an @Autowired skillRepository field
+     * */
+    @Test
+    public void testHomeControllerHasSkillRepository() throws ClassNotFoundException {
+        Class homeControllerClass = getClassByName("controllers.HomeController");
+        Field skillRepositoryField = null;
+        try {
+            skillRepositoryField = homeControllerClass.getDeclaredField("skillRepository");
+        } catch (NoSuchFieldException e) {
+            fail("HomeController should have a skillRepository field");
         }
 
         assertEquals(SkillRepository.class, skillRepositoryField.getType(), "skillRepository is of incorrect type");
-       assertNotNull(skillRepositoryField.getAnnotation(Autowired.class), "skillRepository must be @Autowired");
-   }
+        assertNotNull(skillRepositoryField.getAnnotation(Autowired.class), "skillRepository must be @Autowired");
+    }
 
-   /*
-   * Verifies that HomeController.processAddJobForm queries skillRepository and sets skills properly
-    * */
+    /*
+     * Verifies that HomeController.processAddJobForm queries skillRepository and sets skills properly
+     * */
     @Test
-    public void testProcessAddJobFormHandlesSkillsProperly (
-            @org.jetbrains.annotations.NotNull @Mocked SkillRepository skillRepository,
+    public void testProcessAddJobFormHandlesSkillsProperly(
+            @Mocked SkillRepository skillRepository,
             @Mocked EmployerRepository employerRepository,
             @Mocked JobRepository jobRepository,
             @Mocked Job job,
@@ -133,10 +137,11 @@ public class TestTaskFour extends AbstractTest {
             throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
         Class homeControllerClass = getClassByName("controllers.HomeController");
         Method processAddJobFormMethod = homeControllerClass.getMethod("processAddJobForm", Job.class, Errors.class, Model.class, int.class, List.class);
+
         new Expectations() {{
             skillRepository.findAllById((Iterable<Integer>) any);
-           job.setSkills((List<Skill>) any);
-       }};
+            job.setSkills((List<Skill>) any);
+        }};
 
         Model model = new ExtendedModelMap();
         HomeController homeController = new HomeController();
@@ -152,67 +157,66 @@ public class TestTaskFour extends AbstractTest {
         Field jobRepositoryField = homeControllerClass.getDeclaredField("jobRepository");
         jobRepositoryField.setAccessible(true);
         jobRepositoryField.set(homeController, jobRepository);
+
         processAddJobFormMethod.invoke(homeController, job, errors, model, 0, new ArrayList<Skill>());
     }
 
     /*
-    * Verifies that skillRepository and employerRepository fields have been added to ListController
-    * */
+     * Verifies that skillRepository and employerRepository fields have been added to ListController
+     * */
     @Test
-          public void testListControllerHasAutowiredRepositories () throws ClassNotFoundException {
+    public void testListControllerHasAutowiredRepositories() throws ClassNotFoundException {
         Class listControllerClass = getClassByName("controllers.ListController");
-    }
-     Field employerRepositoryField = null;
-    Field skillRepositoryField = null;
+        Field employerRepositoryField = null;
+        Field skillRepositoryField = null;
 
         try {
             employerRepositoryField = listControllerClass.getDeclaredField("employerRepository");
-    }
         } catch (NoSuchFieldException e) {
-           fail("ListController must have an employerRepository field");
-       }
+            fail("ListController must have an employerRepository field");
+        }
 
-     assertEquals(EmployerRepository.class, employerRepositoryField.getType());
-assertNotNull(employerRepositoryField.getAnnotation(Autowired.class));
+        assertEquals(EmployerRepository.class, employerRepositoryField.getType());
+        assertNotNull(employerRepositoryField.getAnnotation(Autowired.class));
 
         try {
-           skillRepositoryField = listControllerClass.getDeclaredField("skillRepository");
-       } catch (NoSuchFieldException e) {
+            skillRepositoryField = listControllerClass.getDeclaredField("skillRepository");
+        } catch (NoSuchFieldException e) {
             fail("ListController must have a skillRepository field");
         }
 
-       assertEquals(SkillRepository.class, skillRepositoryField.getType());
-       assertNotNull(skillRepositoryField.getAnnotation(Autowired.class));
+        assertEquals(SkillRepository.class, skillRepositoryField.getType());
+        assertNotNull(skillRepositoryField.getAnnotation(Autowired.class));
     }
 
     /*
-    * Verifies that ListController.list sets the correct model attributes using skill/employerRepository objects
-   * */
+     * Verifies that ListController.list sets the correct model attributes using skill/employerRepository objects
+     * */
     @Test
-    public void testListControllerListMethodSetsFormFieldData (@Mocked Model model, @Mocked SkillRepository skillRepository, @Mocked EmployerRepository employerRepository) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+    public void testListControllerListMethodSetsFormFieldData(@Mocked Model model, @Mocked SkillRepository skillRepository, @Mocked EmployerRepository employerRepository) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
         Class listControllerClass = getClassByName("controllers.ListController");
         ListController listController = new ListController();
 
-       new Expectations() {{
-           model.addAttribute("employers", any);
+        new Expectations() {{
+            model.addAttribute("employers", any);
             model.addAttribute("skills", any);
-           skillRepository.findAll();
+            skillRepository.findAll();
             employerRepository.findAll();
         }};
 
         Field skillRepositoryField = listControllerClass.getDeclaredField("skillRepository");
-       skillRepositoryField.setAccessible(true);
+        skillRepositoryField.setAccessible(true);
         skillRepositoryField.set(listController, skillRepository);
 
         Field employerRepositoryField = listControllerClass.getDeclaredField("employerRepository");
-       employerRepositoryField.setAccessible(true);
-       employerRepositoryField.set(listController, employerRepository);
+        employerRepositoryField.setAccessible(true);
+        employerRepositoryField.set(listController, employerRepository);
 
         listController.list(model);
-   }
+    }
 
     @Test
-    public void testSqlQuery () throws IOException {
+    public void testSqlQuery() throws IOException {
         String queryFileContents = getFileContents("queries.sql");
 
         Pattern queryPattern = Pattern.compile("SELECT\\s+\\*\\s+FROM\\s+skill" +
@@ -223,5 +227,4 @@ assertNotNull(employerRepositoryField.getAnnotation(Autowired.class));
         boolean queryFound = queryMatcher.find();
         assertTrue(queryFound, "Task 4 SQL query is incorrect. Test your query against your database to find the error.");
     }
-
 }

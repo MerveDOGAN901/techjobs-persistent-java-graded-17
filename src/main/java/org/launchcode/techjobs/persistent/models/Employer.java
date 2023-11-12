@@ -7,12 +7,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 @Entity
 public class Employer extends AbstractEntity {
-    public Employer(){
-    }
 
     @NotNull
     @Size(min = 3, max = 50)
@@ -22,18 +21,38 @@ public class Employer extends AbstractEntity {
     @JoinColumn(name="employer_id")
     private List<Job> jobs = new ArrayList<>();
 
-    public void setLocation(String location) {
+    public Employer(String location) {
         this.location = location;
     }
+
+    public Employer () {}
+
     public String getLocation() {
         return location;
     }
 
-    public List<Job> getJobs() {
-        return jobs;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Employer employer = (Employer) o;
+        return Objects.equals(location, employer.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), location);
+    }
+
+    @Override
+    public String toString() {
+        return "Employer{" +
+                "location='" + location + '\'' +
+                '}';
     }
 }
